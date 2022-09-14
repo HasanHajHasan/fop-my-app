@@ -21,6 +21,7 @@ app.post('/sum',async  (req, res) => {
     res.status(204).json({
         result: result// ./fop -fo examples/fo/tables/headfoot.fo -pdf ./header-table.pdf 
     })
+    console.log("====>>>")
 
     exec("./trialscript 'headfoot.fo' '../../opt/fop-my-app/pdfs/header-1.pdf'", (error, stdout, stderr) => {
         if (error) {

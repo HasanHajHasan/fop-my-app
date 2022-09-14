@@ -1,4 +1,5 @@
 const express = require('express')
+const { exec } = require("child_process");
 
 const bodyParser = require('body-parser')
 
@@ -19,6 +20,18 @@ app.post('/sum',(req,res)=>{
     res.status(204).json({
         result : result
     })
+    exec("ls -la", (error, stdout, stderr) => {
+        console.log("ls--->>")
+        if (error) {
+            console.log(`error: ${error.message}`);
+            return;
+        }
+        if (stderr) {
+            console.log(`stderr: ${stderr}`);
+            return;
+        }
+        console.log(`stdout: ${stdout}`);
+    });
     console.log("0000>>>>",result)
 })
 

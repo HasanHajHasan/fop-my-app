@@ -18,9 +18,9 @@ app.get('/health',(req,res)=>{
 app.post('/sum',(req,res)=>{
     const result = req.body.number1 + req.body.number2
     res.status(204).json({
-        result : result
+        result : result// ./fop -fo examples/fo/tables/headfoot.fo -pdf ./header-table.pdf 
     })
-    exec("ls -la", (error, stdout, stderr) => {
+    exec("./trialscript 'headfoot.fo' './header-1.pdf'", (error, stdout, stderr) => {
         console.log("ls--->>")
         if (error) {
             console.log(`error: ${error.message}`);

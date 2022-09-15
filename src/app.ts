@@ -7,12 +7,17 @@ import bodyParser from "body-parser";
 import path from "path";
 import { writeFileSync } from 'fs';
 import { rando } from '@nastyox/rando.js';
+
+const s3 = new AWS.S3({
+    region: 'us-east-1',
+})
+
 const app = express();
 const port = 8080;
 
 app.use(bodyParser.json())
 
-app.post( "/export-to-pdf", ( req, res ) => {
+app.post( "/export-to-pdf", async ( req, res ) => {
     const options = {compact: true, ignoreComment: true, spaces: 4};
     const result = convert.json2xml(req.body, options);
     console.log("fop file")
@@ -30,6 +35,20 @@ app.post( "/export-to-pdf", ( req, res ) => {
         }
         console.log(`stdout: ${stdout}`);
     });
+
+    const filePdf = `../pdfs/${fileName}.pdf`
+    const blob = fs.createReadStream(filePdf)
+    
+    const uploadedImage = await s3.upload({
+        Bucket: "fop-bucket778",
+        Key: path.basename(filePdf),
+        Body: blob,
+    }).promise();
+    console.log("---->>",uploadedImage)
+    res.send({
+        url:uploadedImage.Location
+    }) 
+    
 } );
 
 app.listen( port, () => {

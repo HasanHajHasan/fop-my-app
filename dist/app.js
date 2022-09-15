@@ -19,7 +19,7 @@ app.post("/export-to-pdf", (req, res) => {
     const fileName = `${(0, rando_js_1.rando)(100000)}-pdf`;
     (0, fs_1.writeFileSync)(`../fops/${fileName}.fo`, result);
     console.log("file name: ", fileName);
-    (0, child_process_1.exec)(`./fopScript.sh '../../opt/fop-my-app/fops/${fileName}.fo' '../../opt/fop-my-app/pdfs/${fileName}.pdf'`, (error, stdout, stderr) => {
+    (0, child_process_1.exec)(`fopScript.sh '../../opt/fop-my-app/fops/${fileName}.fo' '../../opt/fop-my-app/pdfs/${fileName}.pdf'`, (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
             return;

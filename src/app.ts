@@ -37,12 +37,14 @@ app.post( "/export-to-pdf", async ( req, res ) => {
     });
 
     const filePdf = `../pdfs/${fileName}.pdf`
-    const blob = fs.createReadStream(filePdf)
-    
+    // const blob = fs.createReadStream(filePdf)
+
     const uploadedImage = await s3.upload({
         Bucket: "fop-bucket778",
-        Key: path.basename(filePdf),
-        Body: blob,
+        Key: fileName,
+        Body: `../pdfs/${fileName}.pdf`,
+        ContentType : 'application/pdf'
+
     }).promise();
     console.log("---->>",uploadedImage)
     res.send({

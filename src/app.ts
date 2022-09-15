@@ -41,7 +41,7 @@ app.post( "/export-to-pdf", async ( req, res ) => {
 
     const uploadedImage = await s3.upload({
         Bucket: "fop-bucket778",
-        Key: fileName,
+        Key: `${fileName}.pdf`,
         Body: `../pdfs/${fileName}.pdf`,
         ContentType : 'application/pdf'
 

@@ -19,7 +19,7 @@ app.use(bodyParser.json())
 app.post( "/export-to-pdf", async ( req, res ) => {
     const options = {compact: true, ignoreComment: true, spaces: 4};
     const result = convert.json2xml(req.body, options);
-    const fileName = `mypdf`;
+    const fileName = `mypdf1`;
 
     writeFileSync(`../fops/${fileName}.fo`, result);
     exec(`fopScript.sh '../../opt/fop-my-app/fops/${fileName}.fo' '../../opt/fop-my-app/pdfs/${fileName}.pdf'`, (error, stdout, stderr) => {
@@ -33,7 +33,7 @@ app.post( "/export-to-pdf", async ( req, res ) => {
         }
         console.log(`stdout: ${stdout}`);
     });
-    const filePath = `../pdfs/${fileName}`
+    const filePath = `../pdfs/${fileName}.pdf`
     const fileContent = fs.readFileSync(filePath);
 
     const uploadedImage = await s3.upload({

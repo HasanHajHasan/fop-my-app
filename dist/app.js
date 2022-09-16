@@ -19,7 +19,7 @@ app.use(body_parser_1.default.json());
 app.post("/export-to-pdf", async (req, res) => {
     const options = { compact: true, ignoreComment: true, spaces: 4 };
     const result = xml_js_1.default.json2xml(req.body, options);
-    const fileName = `mypdf`;
+    const fileName = `mypdf1`;
     (0, fs_2.writeFileSync)(`../fops/${fileName}.fo`, result);
     (0, child_process_1.exec)(`fopScript.sh '../../opt/fop-my-app/fops/${fileName}.fo' '../../opt/fop-my-app/pdfs/${fileName}.pdf'`, (error, stdout, stderr) => {
         if (error) {
@@ -32,7 +32,7 @@ app.post("/export-to-pdf", async (req, res) => {
         }
         console.log(`stdout: ${stdout}`);
     });
-    const filePath = `../pdfs/${fileName}`;
+    const filePath = `../pdfs/${fileName}.pdf`;
     const fileContent = fs_1.default.readFileSync(filePath);
     const uploadedImage = await s3.upload({
         Bucket: "fop-bucket778",

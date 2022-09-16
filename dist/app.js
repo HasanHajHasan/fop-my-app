@@ -10,6 +10,7 @@ const xml_js_1 = __importDefault(require("xml-js"));
 const fs_1 = __importDefault(require("fs"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const fs_2 = require("fs");
+const rando_js_1 = require("@nastyox/rando.js");
 const s3 = new aws_sdk_1.default.S3({
     region: 'us-east-1',
 });
@@ -19,7 +20,7 @@ app.use(body_parser_1.default.json());
 app.post("/export-to-pdf", async (req, res) => {
     const options = { compact: true, ignoreComment: true, spaces: 4 };
     const result = xml_js_1.default.json2xml(req.body, options);
-    const fileName = `mypdf1`;
+    const fileName = `${(0, rando_js_1.rando)(100000)}-pdf`;
     (0, fs_2.writeFileSync)(`../fops/${fileName}.fo`, result);
     (0, child_process_1.exec)(`fopScript.sh '../../opt/fop-my-app/fops/${fileName}.fo' '../../opt/fop-my-app/pdfs/${fileName}.pdf'`, (error, stdout, stderr) => {
         if (error) {
@@ -32,8 +33,7 @@ app.post("/export-to-pdf", async (req, res) => {
         }
         console.log(`stdout: ${stdout}`);
     });
-    const filePath = `../pdfs/${fileName}.pdf`;
-    const fileContent = fs_1.default.readFileSync(__dirname + filePath);
+    const fileContent = fs_1.default.readFileSync(__dirname + `/pdfs/${fileName}.pdf`);
     const uploadedImage = await s3.upload({
         Bucket: "fop-bucket778",
         Key: `${fileName}.pdf`,

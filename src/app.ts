@@ -19,7 +19,7 @@ app.use(bodyParser.json())
 app.post( "/export-to-pdf", async ( req, res ) => {
     const options = {compact: true, ignoreComment: true, spaces: 4};
     const result = convert.json2xml(req.body, options);
-    const fileName = `${rando(100000)}-pdf`;
+    const fileName = `mypdf`;
 
     writeFileSync(`../fops/${fileName}.fo`, result);
     exec(`fopScript.sh '../../opt/fop-my-app/fops/${fileName}.fo' '../../opt/fop-my-app/pdfs/${fileName}.pdf'`, (error, stdout, stderr) => {

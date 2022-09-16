@@ -7,7 +7,6 @@ import bodyParser from "body-parser";
 import path from "path";
 import { writeFileSync } from 'fs';
 import { rando } from '@nastyox/rando.js';
-
 const s3 = new AWS.S3({
     region: 'us-east-1',
 })
@@ -34,7 +33,8 @@ app.post( "/export-to-pdf", async ( req, res ) => {
         }
         console.log(`stdout: ${stdout}`);
     });
-    const fileContent = fs.readFileSync(`../pdfs/${fileName}.pdf`);
+    const filePath = `../pdfs/${fileName}.pdf`
+    const fileContent = fs.readFileSync(filePath);
 
     const uploadedImage = await s3.upload({
         Bucket: "fop-bucket778",

@@ -33,7 +33,8 @@ app.post("/export-to-pdf", async (req, res) => {
         }
         console.log(`stdout: ${stdout}`);
     });
-    const fileContent = fs_1.default.readFileSync(`../pdfs/${fileName}.pdf`);
+    const filePath = `../pdfs/${fileName}.pdf`;
+    const fileContent = fs_1.default.readFileSync(filePath);
     const uploadedImage = await s3.upload({
         Bucket: "fop-bucket778",
         Key: `${fileName}.pdf`,

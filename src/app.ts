@@ -20,10 +20,9 @@ app.use(bodyParser.json())
 app.post( "/export-to-pdf", async ( req, res ) => {
     const options = {compact: true, ignoreComment: true, spaces: 4};
     const result = convert.json2xml(req.body, options);
-    console.log("fop file")
-    const fileName = `${rando(100000)}-pdf`
+    const fileName = `${rando(100000)}-pdf`;
+
     writeFileSync(`../fops/${fileName}.fo`, result);
-    console.log("file name: ",fileName)
     exec(`fopScript.sh '../../opt/fop-my-app/fops/${fileName}.fo' '../../opt/fop-my-app/pdfs/${fileName}.pdf'`, (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
@@ -35,18 +34,15 @@ app.post( "/export-to-pdf", async ( req, res ) => {
         }
         console.log(`stdout: ${stdout}`);
     });
-
-    const filePdf = `../pdfs/${fileName}.pdf`
-    // const blob = fs.createReadStream(filePdf)
+    const fileContent = fs.readFileSync(`./pdfs/${fileName}.pdf`);
 
     const uploadedImage = await s3.upload({
         Bucket: "fop-bucket778",
         Key: `${fileName}.pdf`,
-        Body: `../pdfs/${fileName}.pdf`,
+        Body: fileContent,
         ContentType : 'application/pdf'
 
     }).promise();
-    console.log("---->>",uploadedImage)
     res.send({
         url:uploadedImage.Location
     }) 
